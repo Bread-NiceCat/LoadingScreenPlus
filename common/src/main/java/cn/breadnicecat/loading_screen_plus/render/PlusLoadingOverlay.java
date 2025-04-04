@@ -3,12 +3,14 @@ package cn.breadnicecat.loading_screen_plus.render;
 import cn.breadnicecat.loading_screen_plus.LoadingScreenPlus;
 import cn.breadnicecat.loading_screen_plus.config.ModConfig;
 import cn.breadnicecat.loading_screen_plus.render.component.Blank;
+import cn.breadnicecat.loading_screen_plus.render.component.compound.BlankMemoryBar;
 import cn.breadnicecat.loading_screen_plus.render.component.compound.MemoryBar;
 import cn.breadnicecat.loading_screen_plus.render.component.layout.VerticalLayout;
 import cn.breadnicecat.loading_screen_plus.render.component.logo.AbstractLogo;
 import cn.breadnicecat.loading_screen_plus.render.component.progressbar.AbstractProgressBar;
 import cn.breadnicecat.loading_screen_plus.render.component.text.BlankSingleLineText;
 import cn.breadnicecat.loading_screen_plus.render.component.text.SimpleSingleLineText;
+import cn.breadnicecat.loading_screen_plus.render.component.text.TimerText;
 import cn.breadnicecat.loading_screen_plus.utils.ModUtils;
 import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.Minecraft;
@@ -65,36 +67,39 @@ public class PlusLoadingOverlay extends LoadingOverlay {
 	public Set<IModConfigLoadable> configLoadables;
 	
 	public VerticalLayout baseLayout = new VerticalLayout(10);
-	public AbstractProgressBar stepProgressbar;
+	public VerticalLayout hintLayout = new VerticalLayout(1);
+	
+	public MemoryBar memoryBar;
 	public AbstractLogo logo;
-	public SimpleSingleLineText topTint;
+	public AbstractProgressBar stepProgressbar;
+	
+	public SimpleSingleLineText topHint;
+	public SimpleSingleLineText timerHint;
+	public SimpleSingleLineText fpsHint;
 	
 	protected void init() {
 		logo = config.mojangLogo.create();
 		
 		Size.Delegate simpleBarSize = new Size.Delegate(() -> logo.getWidth(), () -> 10);
 		
-		topTint = config.enableHint ? new SimpleSingleLineText("Default text here:lalalala") : new BlankSingleLineText();
+		topHint = config.enableHint ? new SimpleSingleLineText("Test T!!est 测试 😀") : new BlankSingleLineText();
+		timerHint = config.enableTimer ? new TimerText() : new BlankSingleLineText();
+		fpsHint = config.enableFps ? new SimpleSingleLineText(() -> "FPS:" + minecraft.getFps()) : new BlankSingleLineText();
 		
-		MemoryBar memoryBar = config.enableMemoryBar ? new MemoryBar(simpleBarSize) : new MemoryBar(simpleBarSize) {
-			@Override
-			public void draw(GuiGraphics guiGraphics, int x, int y) {
-			}
-			
-			@Override
-			public void loadConfig(ModConfig config) {
-			}
-		};
+		hintLayout.addAll(topHint, fpsHint, timerHint);
+		
+		memoryBar = config.enableMemoryBar ? new MemoryBar(simpleBarSize) : new BlankMemoryBar(simpleBarSize);
 		
 		stepProgressbar = config.progressStyle.create(simpleBarSize);
-		baseLayout.add(new Blank(topTint));
+		
+		baseLayout.add(new Blank(topHint));
 		baseLayout.add(memoryBar);
 		baseLayout.add(new Blank(new Size.Immutable(0, 15)));
 		baseLayout.add(logo);
-		baseLayout.add(new Blank(new Size.Immutable(0, 15)));
+		baseLayout.add(new Blank(new Size.Immutable(0, 10)));
 		baseLayout.add(stepProgressbar);
 		
-		configLoadables = Set.of(topTint, stepProgressbar);
+		configLoadables = Set.of(topHint, fpsHint, timerHint, stepProgressbar, memoryBar);
 		configLoadables.forEach(e -> e.loadConfig(config));
 	}
 	
@@ -109,8 +114,7 @@ public class PlusLoadingOverlay extends LoadingOverlay {
 		
 		int leftX = (width - logo.getWidth()) / 2;
 		baseLayout.draw(guiGraphics, leftX, 0);
-		topTint.draw(guiGraphics, 5, 5);
-		
+		hintLayout.draw(guiGraphics, 2, 2);
 	}
 	
 	

@@ -20,7 +20,7 @@ public class MojangsterLogo extends AbstractLogo {
 		super();
 	}
 	
-	int animSpeed = 33;
+	int animSpeed = 11;
 	private long animBegin = 0L;
 	
 	@Override

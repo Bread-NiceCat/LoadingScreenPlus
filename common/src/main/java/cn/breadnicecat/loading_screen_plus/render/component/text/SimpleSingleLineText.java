@@ -8,6 +8,8 @@ import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
+import java.util.function.Supplier;
+
 /**
  * Created in 2025/4/4 14:53
  * Project: loading-screen-plus
@@ -22,13 +24,17 @@ public class SimpleSingleLineText extends AbstractText implements IModConfigLoad
 	public Font font = ModFontHelper.getFont();
 	
 	public SimpleSingleLineText(String text) {
+		this(() -> text);
+	}
+	
+	public SimpleSingleLineText(Supplier<String> text) {
 		super(Size.ZERO, text);
 		onContentChanged();
 	}
 	
 	@Override
 	protected void onContentChanged() {
-		setSize(font.width(text), font.lineHeight);
+		setSize(font.width(getText()), font.lineHeight);
 	}
 	
 	@Override
@@ -38,6 +44,6 @@ public class SimpleSingleLineText extends AbstractText implements IModConfigLoad
 	
 	@Override
 	public void draw(GuiGraphics guiGraphics, int x, int y) {
-		guiGraphics.drawString(font, text, x, y, color);
+		guiGraphics.drawString(font, getText(), x, y, color);
 	}
 }

@@ -22,7 +22,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class ModConfig implements ConfigData {
 	
 	//===========================================
-	//=                                         =
+	//=                Hints                    =
 	//===========================================
 	
 	@Comment("""
@@ -31,13 +31,18 @@ public class ModConfig implements ConfigData {
 			""")
 	public boolean enableHint = true;
 	
+	@Comment("""
+			Whether a simple timer on the top left should be drawn.
+			Default: true
+			""")
+	public boolean enableTimer = true;
 	
 	@Comment("""
-			Declares the background color of the loading screen.
-			Default: 15675965
+			Whether a fps hint on the top left should be drawn.
+			Default: true
 			""")
-	@ConfigEntry.ColorPicker
-	public int backgroundColor = 0xEF323D;
+	public boolean enableFps = true;
+	
 	
 	//===========================================
 	//=             Memory Bar                  =
@@ -120,4 +125,10 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Gui.EnumHandler
 	public LogoStyle mojangLogo = LogoStyle.mojangster;
 	
+	@Comment("""
+			Declares the background color of the loading screen.
+			Default: 15675965
+			""")
+	@ConfigEntry.ColorPicker
+	public int backgroundColor = 0xEF323D;
 }
