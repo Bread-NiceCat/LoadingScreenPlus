@@ -18,26 +18,30 @@ public abstract class Component implements IDrawable {
 			VERTICAL = 0b10,
 			HORIZONTAL_AND_VERTICAL = 0b11;
 	
-	protected final Size.Mutable size;
+	protected Size size;
 	
 	public Component(Size size) {
-		this.size = size.mutable();
+		this.size = size;
 	}
 	
 	public int getWidth() {
-		return size.getWeigh();
+		return size.getWidth();
 	}
 	
 	public int getHeight() {
 		return size.getHeight();
 	}
 	
+	public void setSize(int width, int height) {
+		size = size.set(width, height);
+	}
+	
 	public void setWidth(int width) {
-		size.setWeigh(width);
+		size = size.setWidth(width);
 	}
 	
 	public void setHeight(int height) {
-		size.setHeight(height);
+		size = size.setHeight(height);
 	}
 	
 	public void onAttachedToParent(Component parent) {

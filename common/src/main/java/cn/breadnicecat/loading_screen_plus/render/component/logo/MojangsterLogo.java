@@ -1,7 +1,6 @@
 package cn.breadnicecat.loading_screen_plus.render.component.logo;
 
 import cn.breadnicecat.loading_screen_plus.render.PlusLoadingOverlay;
-import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -18,7 +17,7 @@ import static java.lang.Math.min;
  **/
 public class MojangsterLogo extends AbstractLogo {
 	public MojangsterLogo() {
-		super(new Size(1024, 256));
+		super();
 	}
 	
 	int animSpeed = 33;

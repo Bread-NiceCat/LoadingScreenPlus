@@ -1,10 +1,8 @@
 package cn.breadnicecat.loading_screen_plus.render.component.progressbar;
 
-import cn.breadnicecat.loading_screen_plus.config.ModConfig;
+import cn.breadnicecat.loading_screen_plus.render.IModConfigLoadable;
 import cn.breadnicecat.loading_screen_plus.render.component.Component;
 import cn.breadnicecat.loading_screen_plus.utils.Size;
-
-import static org.joml.Math.clamp;
 
 /**
  * Created in 2025/3/30 10:57
@@ -15,7 +13,7 @@ import static org.joml.Math.clamp;
  *
  * <p>
  **/
-public abstract class AbstractProgressBar extends Component {
+public abstract class AbstractProgressBar extends Component implements IModConfigLoadable {
 	
 	/**
 	 * range:[0,1]
@@ -26,18 +24,12 @@ public abstract class AbstractProgressBar extends Component {
 		super(size);
 	}
 	
-	
-	abstract void loadConfig(ModConfig config);
-	
-	void setProgress(float progress) {
+	public void setProgress(float progress) {
 		this.progress = progress;
 	}
 	
-	void growProgress(float delta) {
+	public void growProgress(float delta) {
 		this.progress += delta;
 	}
 	
-	void onProgressUpdate() {
-		progress = clamp(0f, 1f, progress);
-	}
 }

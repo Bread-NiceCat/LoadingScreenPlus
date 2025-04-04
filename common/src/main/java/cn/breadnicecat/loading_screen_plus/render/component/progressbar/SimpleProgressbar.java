@@ -5,6 +5,8 @@ import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.gui.GuiGraphics;
 import org.joml.Math;
 
+import static cn.breadnicecat.loading_screen_plus.utils.ModUtils.replaceAlpha;
+
 /**
  * Created in 2025/3/30 11:19
  * Project: loading-screen-plus
@@ -30,9 +32,9 @@ public class SimpleProgressbar extends AbstractProgressBar {
 	
 	
 	@Override
-	void loadConfig(ModConfig config) {
-		this.barColor = config.barColor;
-		this.frameColor = config.barFrameColor;
+	public void loadConfig(ModConfig config) {
+		this.barColor = replaceAlpha(config.barColor, 0xff);
+		this.frameColor = replaceAlpha(config.barFrameColor, 0xff);
 	}
 	
 	@Override

@@ -20,7 +20,7 @@ public abstract class AbstractLayout extends Component {
 	protected List<Component> components = new LinkedList<>();
 	
 	public AbstractLayout() {
-		super(new Size(0, 0));
+		super(Size.ZERO);
 	}
 	
 	public Stream<Component> getComponents() {
@@ -30,10 +30,12 @@ public abstract class AbstractLayout extends Component {
 	public void add(Component child) {
 		components.add(child);
 		child.onAttachedToParent(this);
-		this.onChildAttached(child);
 	}
 	
-	public void onChildAttached(Component child) {
+	public void addAll(Component... children) {
+		for (Component child : children) {
+			add(child);
+		}
 	}
 	
 }

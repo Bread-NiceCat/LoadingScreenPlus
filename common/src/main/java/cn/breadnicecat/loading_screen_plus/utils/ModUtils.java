@@ -16,4 +16,8 @@ public class ModUtils {
 	public static ResourceLocation prefix(String path) {
 		return new ResourceLocation(LoadingScreenPlus.MOD_ID, path);
 	}
+	
+	public static int replaceAlpha(int color, int alpha) {
+		return color & 0xFFFFFF | alpha << 24;
+	}
 }

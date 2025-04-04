@@ -13,7 +13,7 @@ import cn.breadnicecat.loading_screen_plus.utils.Size;
  * <p>
  **/
 public abstract class AbstractLogo extends Component {
-	public AbstractLogo(Size size) {
-		super(size);
+	public AbstractLogo() {
+		super(new Size.Immutable(1024, 256));
 	}
 }

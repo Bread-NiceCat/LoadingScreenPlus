@@ -1,6 +1,5 @@
 package cn.breadnicecat.loading_screen_plus.render.component.logo;
 
-import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +17,7 @@ import static java.lang.Math.min;
  **/
 public class VanillaLogo extends AbstractLogo {
 	public VanillaLogo() {
-		super(new Size(1024, 256));
+		super();
 	}
 	
 	@Override

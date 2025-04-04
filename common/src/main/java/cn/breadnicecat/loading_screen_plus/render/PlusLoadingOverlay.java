@@ -2,13 +2,13 @@ package cn.breadnicecat.loading_screen_plus.render;
 
 import cn.breadnicecat.loading_screen_plus.LoadingScreenPlus;
 import cn.breadnicecat.loading_screen_plus.config.ModConfig;
-import cn.breadnicecat.loading_screen_plus.render.component.Component;
+import cn.breadnicecat.loading_screen_plus.render.component.Blank;
+import cn.breadnicecat.loading_screen_plus.render.component.compound.MemoryBar;
 import cn.breadnicecat.loading_screen_plus.render.component.layout.VerticalLayout;
 import cn.breadnicecat.loading_screen_plus.render.component.logo.AbstractLogo;
-import cn.breadnicecat.loading_screen_plus.render.component.logo.MojangsterLogo;
-import cn.breadnicecat.loading_screen_plus.render.component.progressbar.SimpleProgressbar;
-import cn.breadnicecat.loading_screen_plus.render.component.progressbar.TestProgressBar;
-import cn.breadnicecat.loading_screen_plus.render.component.wrapper.MaxWrapper;
+import cn.breadnicecat.loading_screen_plus.render.component.progressbar.AbstractProgressBar;
+import cn.breadnicecat.loading_screen_plus.render.component.text.BlankSingleLineText;
+import cn.breadnicecat.loading_screen_plus.render.component.text.SimpleSingleLineText;
 import cn.breadnicecat.loading_screen_plus.utils.ModUtils;
 import cn.breadnicecat.loading_screen_plus.utils.Size;
 import net.minecraft.client.Minecraft;
@@ -16,11 +16,16 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadInstance;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import static cn.breadnicecat.loading_screen_plus.utils.ModUtils.prefix;
 
 /**
  * Created in 2025/3/30 08:53
@@ -32,7 +37,7 @@ import java.util.function.Consumer;
  * <p>
  **/
 public class PlusLoadingOverlay extends LoadingOverlay {
-	public static final ResourceLocation MOJANGSTER_DYNAMIC_LOCATION = ModUtils.prefix("textures/mojangster/dynamic.png");
+	public static final ResourceLocation MOJANGSTER_DYNAMIC_LOCATION = prefix("textures/mojangster/dynamic.png");
 	
 	private final Minecraft minecraft;
 	private final ReloadInstance reload;
@@ -49,23 +54,48 @@ public class PlusLoadingOverlay extends LoadingOverlay {
 		this.onFinish = onFinish;
 		this.fadeIn = fadeIn;
 		this.config = LoadingScreenPlus.config.get();
-		minecraft.getTextureManager().register(MOJANGSTER_DYNAMIC_LOCATION, new SimpleTexture(MOJANGSTER_DYNAMIC_LOCATION));
+		ResourceManager resourceManager = minecraft.getResourceManager();
+		TextureManager textureManager = minecraft.getTextureManager();
+		textureManager.register(MOJANGSTER_DYNAMIC_LOCATION, new SimpleTexture(MOJANGSTER_DYNAMIC_LOCATION));
+		ModFontHelper.init(resourceManager, textureManager);
+		init();
 		LoadingScreenPlus.logger.info("PlusLoadingOverlay Loaded.");
 	}
 	
-	public VerticalLayout baseLayout = new VerticalLayout();
-	public SimpleProgressbar stepProgressbar0 = new TestProgressBar(new Size(50, 10), 0.02f);
-	public SimpleProgressbar stepProgressbar = new TestProgressBar(new Size(100, 10));
-	public SimpleProgressbar stepProgressbar1 = new TestProgressBar(new Size(150, 10));
+	public Set<IModConfigLoadable> configLoadables;
 	
-	private final AbstractLogo logo = new MojangsterLogo();
+	public VerticalLayout baseLayout = new VerticalLayout(10);
+	public AbstractProgressBar stepProgressbar;
+	public AbstractLogo logo;
+	public SimpleSingleLineText topTint;
 	
-	{
-		baseLayout.setGap(10);
+	protected void init() {
+		logo = config.mojangLogo.create();
+		
+		Size.Delegate simpleBarSize = new Size.Delegate(() -> logo.getWidth(), () -> 10);
+		
+		topTint = config.enableHint ? new SimpleSingleLineText("Default text here:lalalala") : new BlankSingleLineText();
+		
+		MemoryBar memoryBar = config.enableMemoryBar ? new MemoryBar(simpleBarSize) : new MemoryBar(simpleBarSize) {
+			@Override
+			public void draw(GuiGraphics guiGraphics, int x, int y) {
+			}
+			
+			@Override
+			public void loadConfig(ModConfig config) {
+			}
+		};
+		
+		stepProgressbar = config.progressStyle.create(simpleBarSize);
+		baseLayout.add(new Blank(topTint));
+		baseLayout.add(memoryBar);
+		baseLayout.add(new Blank(new Size.Immutable(0, 15)));
 		baseLayout.add(logo);
-		baseLayout.add(new MaxWrapper(Component.HORIZONTAL, stepProgressbar0));
-		baseLayout.add(new MaxWrapper(Component.HORIZONTAL, stepProgressbar));
-		baseLayout.add(new MaxWrapper(Component.HORIZONTAL, stepProgressbar1));
+		baseLayout.add(new Blank(new Size.Immutable(0, 15)));
+		baseLayout.add(stepProgressbar);
+		
+		configLoadables = Set.of(topTint, stepProgressbar);
+		configLoadables.forEach(e -> e.loadConfig(config));
 	}
 	
 	
@@ -75,14 +105,12 @@ public class PlusLoadingOverlay extends LoadingOverlay {
 		int height = guiGraphics.guiHeight();
 		
 		//bg-color
-		guiGraphics.fill(RenderType.guiOverlay(), 0, 0, width, height, replaceAlpha(config.backgroundColor, 0xff));
-		int centerX = width / 2 - logo.getWidth() / 2;
-		baseLayout.draw(guiGraphics, centerX, 0);
+		guiGraphics.fill(RenderType.guiOverlay(), 0, 0, width, height, ModUtils.replaceAlpha(config.backgroundColor, 0xff));
 		
-	}
-	
-	private static int replaceAlpha(int color, int alpha) {
-		return color & 0xFFFFFF | alpha << 24;
+		int leftX = (width - logo.getWidth()) / 2;
+		baseLayout.draw(guiGraphics, leftX, 0);
+		topTint.draw(guiGraphics, 5, 5);
+		
 	}
 	
 	

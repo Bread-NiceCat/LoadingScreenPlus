@@ -17,6 +17,11 @@ public class Blank extends Component {
 		super(size);
 	}
 	
+	public Blank(Component component) {
+		this(component.size.delegate());
+	}
+	
+	
 	@Override
 	public void draw(GuiGraphics guiGraphics, int x, int y) {
 	}

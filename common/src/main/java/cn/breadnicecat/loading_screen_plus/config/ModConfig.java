@@ -1,6 +1,8 @@
 package cn.breadnicecat.loading_screen_plus.config;
 
 import cn.breadnicecat.loading_screen_plus.LoadingScreenPlus;
+import cn.breadnicecat.loading_screen_plus.render.component.logo.LogoStyle;
+import cn.breadnicecat.loading_screen_plus.render.component.progressbar.ProgressStyle;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -19,18 +21,15 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config(name = LoadingScreenPlus.MOD_ID)
 public class ModConfig implements ConfigData {
 	
-	
-	@Comment("""
-			Whether the memory usage bar should be drawn.
-			Default: true
-			""")
-	public boolean rendersMemoryBar = true;
+	//===========================================
+	//=                                         =
+	//===========================================
 	
 	@Comment("""
 			Whether the current hints on the top left should be drawn.
 			Default: true
 			""")
-	public boolean rendersHint = true;
+	public boolean enableHint = true;
 	
 	
 	@Comment("""
@@ -40,10 +39,50 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.ColorPicker
 	public int backgroundColor = 0xEF323D;
 	
+	//===========================================
+	//=             Memory Bar                  =
+	//===========================================
+	@Comment("""
+			Whether the memory usage bar should be drawn.
+			Default: true
+			""")
+	public boolean enableMemoryBar = true;
+	
+	@Comment("""
+			The color used in memory usage bar when the remaining memory is more than 25%.
+			Default: 2263842
+			""")
+	@ConfigEntry.ColorPicker
+	public int memoryGoodColor = 0x228B22;
+	
+	@Comment("""
+			The color used in memory usage bar when the remaining memory is between 25% and 15%.
+			Default: 16766720
+			""")
+	@ConfigEntry.ColorPicker
+	public int memoryWarnColor = 0xFFD700;
+	
+	@Comment("""
+			The color used in memory usage bar when the remaining memory is less than 15%.
+			Default: 14381203
+			""")
+	@ConfigEntry.ColorPicker
+	public int memoryLowColor = 0xDB7093;
+	
+	//===========================================
+	//=             Progress Bar                =
+	//===========================================
+	
+	@Comment("""
+			The progress style on the loading screen.
+			Enabled Value:['simple','rainbow_cat'],
+			Default: 'simple'
+			""")
+	public ProgressStyle progressStyle = ProgressStyle.simple;
 	
 	@Comment("""
 			Declares the bar color of the loading screen.
-			 Whether colors are supported depends on Style.
+			Whether colors are supported depends on Style.
 			Default: 16777215
 			""")
 	@ConfigEntry.ColorPicker
@@ -51,11 +90,16 @@ public class ModConfig implements ConfigData {
 	
 	@Comment("""
 			Declares the bar frame color of the loading screen.
-			 Whether colors are supported depends on Style.
+			Whether colors are supported depends on Style.
 			Default: 16777215
 			""")
 	@ConfigEntry.ColorPicker
 	public int barFrameColor = 0xFFFFFF;
+	
+	
+	//===========================================
+	//=                 Text                    =
+	//===========================================
 	
 	@Comment("""
 			Declares the text color of the loading screen.
@@ -64,21 +108,16 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.ColorPicker
 	public int textColor = 0xFFFFFF;
 	
+	//===========================================
+	//=                 Logo                    =
+	//===========================================
 	
 	@Comment("""
 			The logo style on the loading screen.
 			Enabled Value:['simple','none','mojangster'],
-			Default: 'simple'
+			Default: 'mojangster'
 			""")
 	@ConfigEntry.Gui.EnumHandler
-	public LogoStyle mojangLogo = LogoStyle.simple;
-	
-	@Comment("""
-			Declares the logo color of the loading screen.
-			 Whether colors are supported depends on Style.
-			Default: #16777215
-			""")
-	@ConfigEntry.ColorPicker
-	public int logoColor = 0xFFFFFF;
+	public LogoStyle mojangLogo = LogoStyle.mojangster;
 	
 }
