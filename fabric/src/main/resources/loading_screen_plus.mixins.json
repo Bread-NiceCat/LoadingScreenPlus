@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "cn.breadnicecat.loading_screen_plus.mixin.fabric",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MixinMinecraft"
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

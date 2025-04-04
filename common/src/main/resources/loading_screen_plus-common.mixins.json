@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "cn.breadnicecat.loading_screen_plus.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

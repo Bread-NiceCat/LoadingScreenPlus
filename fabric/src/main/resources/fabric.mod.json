@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "loading_screen_plus",
+  "version": "${version}",
+  "name": "Loading Screen Plus",
+  "description": "A mod to improve the loading screen.",
+  "authors": [
+    "Bread_NiceCat"
+  ],
+  "icon": "icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "cn.breadnicecat.loading_screen_plus.fabric.LoadingScreenPlusFabric"
+    ]
+  },
+  "mixins": [
+    "loading_screen_plus.mixins.json",
+    "loading_screen_plus-common.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=1.20.1",
+    "fabric": ">=0.86.1",
+    "cloth-config": ">=11.1.106"
+  }
+}
